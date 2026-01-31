@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingeniería de Instrucciones - Soluciones Educativas</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados - Versión Genérica */
+        :root {
+            --primary-color: #2A5C8B;
+            --secondary-color: #F5A623;
+            --accent-color: #4CAF50;
+            --light-color: #F8F9FA;
+            --dark-color: #212529;
+            --text-color: #333333;
+            --gray-light: #6C757D;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-top: 76px; /* Para compensar el navbar fijo */
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .navbar-brand .logo-icon {
+            color: var(--secondary-color);
+            margin-right: 8px;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark-color) !important;
+            margin: 0 5px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a3c5e 100%);
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e69500;
+            border-color: #e69500;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(245, 166, 35, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .section-title.center {
+            text-align: center;
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light-color);
+            border-left: 4px solid var(--secondary-color);
+            padding: 30px;
+            height: 100%;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-role {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+        
+        .contact-info {
+            background-color: var(--light-color);
+            padding: 30px;
+            border-radius: 10px;
+            height: 100%;
+        }
+        
+        .contact-info i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 92, 139, 0.1);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-links h5 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        .carousel-indicators button {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            margin: 0 5px !important;
+        }
+        
+        .carousel-indicators button.active {
+            background-color: var(--secondary-color) !important;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-section {
+                padding: 70px 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-mortarboard-fill logo-icon"></i> EduDesign Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicios">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portafolio">Portafolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contáctanos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#acerca">Acerca de Nosotros</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section con Carrusel -->
+    <section id="inicio" class="hero-section">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6 animate-fade-in-up">
+                    <h1 class="hero-title">Ingeniería de Instrucciones</h1>
+                    <p class="hero-subtitle">Diseñamos experiencias de aprendizaje efectivas mediante metodologías sistemáticas y tecnología educativa innovadora.</p>
+                    <a href="#servicios" class="btn btn-primary btn-lg">Descubrir Servicios</a>
+                </div>
+                <div class="col-lg-6 animate-fade-in-up">
+                    <!-- Carrusel Bootstrap -->
+                    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner rounded-3 overflow-hidden">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="d-block w-100" alt="Diseño Instruccional">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Diseño Instruccional</h5>
+                                    <p>Metodologías probadas para crear experiencias de aprendizaje significativas.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="d-block w-100" alt="Tecnología Educativa">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Tecnología Educativa</h5>
+                                    <p>Integración de herramientas digitales para potenciar el aprendizaje.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="d-block w-100" alt="Evaluación del Aprendizaje">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Evaluación Educativa</h5>
+                                    <p>Sistemas de medición para validar la efectividad del aprendizaje.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Últimos Artículos del Blog -->
+    <section id="blog" class="py-5">
+        <div class="container">
+            <h2 class="section-title center">Últimos Artículos</h2>
+            <div class="row">
+                <!-- Artículo 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 animate-fade-in-up">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Modelo ADDIE">
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-primary mb-2 align-self-start">Diseño Instruccional</span>
+                            <h5 class="card-title">El Modelo ADDIE: Fundamentos y Aplicación</h5>
+                            <p class="card-text flex-grow-1">Una guía completa sobre las 5 fases del modelo ADDIE y cómo aplicarlo eficazmente en proyectos educativos.</p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-outline-primary">Leer más</a>
+                                <small class="text-muted ms-3"><i class="bi bi-clock"></i> 5 min lectura</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">Publicado el 25 de mayo, 2024</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Artículo 2 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 animate-fade-in-up">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Tecnología Educativa">
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-success mb-2 align-self-start">Tecnología</span>
+                            <h5 class="card-title">Gamificación en el Aprendizaje Digital</h5>
+                            <p class="card-text flex-grow-1">Cómo implementar elementos de juego para aumentar la motivación y el engagement en cursos online.</p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-outline-primary">Leer más</a>
+                                <small class="text-muted ms-3"><i class="bi bi-clock"></i> 7 min lectura</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">Publicado el 22 de mayo, 2024</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Artículo 3 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 animate-fade-in-up">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="IA en Educación">
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-warning mb-2 align-self-start">Innovación</span>
+                            <h5 class="card-title">Inteligencia Artificial en Educación</h5>
+                            <p class="card-text flex-grow-1">Explorando cómo la IA está transformando la personalización del aprendizaje y la evaluación educativa.</p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-outline-primary">Leer más</a>
+                                <small class="text-muted ms-3"><i class="bi bi-clock"></i> 8 min lectura</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">Publicado el 18 de mayo, 2024</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Servicios -->
+    <section id="servicios" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title center">Nuestros Servicios</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4 h-100">
+                        <div class="service-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <h4>Diseño Instruccional</h4>
+                        <p>Desarrollo de materiales educativos, currículos y programas de formación basados en principios pedagógicos y modelos sistémicos como ADDIE y SAM.</p>
+                        <ul class="text-start mt-3">
+                            <li>Análisis de necesidades</li>
+                            <li>Diseño de objetivos</li>
+                            <li>Desarrollo de contenidos</li>
+                            <li>Evaluación formativa</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4 h-100">
+                        <div class="service-icon">
+                            <i class="bi bi-laptop"></i>
+                        </div>
+                        <h4>Tecnología Educativa</h4>
+                        <p>Implementación de plataformas LMS, desarrollo de cursos e-learning interactivos y creación de herramientas digitales para el aprendizaje.</p>
+                        <ul class="text-start mt-3">
+                            <li>Plataformas LMS</li>
+                            <li>Cursos interactivos</li>
+                            <li>Realidad aumentada</li>
+                            <li>Microlearning</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4 h-100">
+                        <div class="service-icon">
+                            <i class="bi bi-bar-chart"></i>
+                        </div>
+                        <h4>Evaluación Educativa</h4>
+                        <p>Diseño de sistemas de evaluación, análisis de datos de aprendizaje y métricas para medir la efectividad de programas formativos.</p>
+                        <ul class="text-start mt-3">
+                            <li>Evaluación sumativa</li>
+                            <li>Análisis de resultados</li>
+                            <li>Learning analytics</li>
+                            <li>Informes de impacto</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Portafolio -->
+    <section id="portafolio" class="py-5">
+        <div class="container">
+            <h2 class="section-title center">Portafolio de Proyectos</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Plataforma E-Learning">
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">E-Learning</span>
+                            <h5 class="card-title">Plataforma Corporativa de Formación</h5>
+                            <p class="card-text">Desarrollo de plataforma LMS para empresa multinacional con más de 10,000 empleados.</p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-1">Moodle</span>
+                                <span class="badge bg-light text-dark me-1">SCORM</span>
+                                <span class="badge bg-light text-dark">Gamificación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Curso Especializado">
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">Diseño Curricular</span>
+                            <h5 class="card-title">Programa de Capacitación en Ciberseguridad</h5>
+                            <p class="card-text">Diseño instruccional completo para programa de formación en seguridad informática.</p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-1">ADDIE</span>
+                                <span class="badge bg-light text-dark me-1">Simulaciones</span>
+                                <span class="badge bg-light text-dark">Evaluación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Sistema de Evaluación">
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">Evaluación</span>
+                            <h5 class="card-title">Sistema de Evaluación Automatizado</h5>
+                            <p class="card-text">Implementación de sistema de evaluación con análisis predictivo para institución educativa.</p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-1">IA</span>
+                                <span class="badge bg-light text-dark me-1">Analytics</span>
+                                <span class="badge bg-light text-dark">Dashboard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrusel de Testimonios -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title center">Lo que Dicen Nuestros Clientes</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-text">
+                                        <i class="bi bi-quote display-6 text-secondary opacity-25"></i>
+                                        <p class="lead">"El equipo transformó completamente nuestro programa de capacitación corporativa. Los resultados han sido excepcionales en términos de engagement y retención del aprendizaje. La metodología sistemática aplicada hizo toda la diferencia."</p>
+                                    </div>
+                                    <div class="testimonial-author">María González</div>
+                                    <div class="testimonial-role">Directora de Formación, Corporación TechEd</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-text">
+                                        <i class="bi bi-quote display-6 text-secondary opacity-25"></i>
+                                        <p class="lead">"La implementación del modelo ADDIE para nuestro curso de desarrollo profesional fue un éxito rotundo. Los participantes mostraron un aumento del 45% en los resultados de evaluación comparado con nuestros métodos anteriores."</p>
+                                    </div>
+                                    <div class="testimonial-author">Carlos Rodríguez</div>
+                                    <div class="testimonial-role">Coordinador Académico, Instituto Profesional</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-text">
+                                        <i class="bi bi-quote display-6 text-secondary opacity-25"></i>
+                                        <p class="lead">"El diseño instruccional personalizado que desarrollaron para nuestra plataforma de e-learning superó todas nuestras expectativas. La combinación de pedagogía y tecnología fue perfecta. ¡Altamente recomendados!"</p>
+                                    </div>
+                                    <div class="testimonial-author">Ana Mendoza</div>
+                                    <div class="testimonial-role">Gerente de Proyectos, EduTech Solutions</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Contacto -->
+    <section id="contacto" class="py-5">
+        <div class="container">
+            <h2 class="section-title center">Contáctanos</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="contact-info">
+                        <h4 class="mb-4">Información de Contacto</h4>
+                        <p><i class="bi bi-geo-alt"></i> Av. Educación 1234, Centro, Ciudad Educativa</p>
+                        <p><i class="bi bi-telephone"></i> Teléfono: +1 (555) 123-4567</p>
+                        <p><i class="bi bi-envelope"></i> Email: info@edudesignpro.com</p>
+                        <p><i class="bi bi-clock"></i> Horario: Lunes a Viernes 9:00 AM - 6:00 PM</p>
+                        
+                        <h5 class="mt-5">Síguenos en Redes Sociales</h5>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre completo *</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico *</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company" class="form-label">Empresa / Institución</label>
+                            <input type="text" class="form-control" id="company">
+                        </div>
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Servicio de interés</label>
+                            <select class="form-select" id="service">
+                                <option value="">Seleccionar...</option>
+                                <option value="design">Diseño Instruccional</option>
+                                <option value="tech">Tecnología Educativa</option>
+                                <option value="evaluation">Evaluación Educativa</option>
+                                <option value="consulting">Consultoría</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mensaje *</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="privacy" required>
+                            <label class="form-check-label" for="privacy">Acepto la política de privacidad</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Acerca de Nosotros -->
+    <section id="acerca" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title center">Acerca de Nosotros</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4">
+                    <h4 class="mb-4">Nuestra Misión</h4>
+                    <p>En <strong>EduDesign Pro</strong> nos especializamos en Ingeniería de Instrucciones, aplicando metodologías sistemáticas para diseñar experiencias de aprendizaje efectivas, eficientes y atractivas.</p>
+                    <p>Combinamos principios pedagógicos sólidos con tecnología innovadora para crear soluciones educativas que generan resultados medibles.</p>
+                    
+                    <h5 class="mt-4">Nuestro Equipo</h5>
+                    <p>Contamos con un equipo multidisciplinario de especialistas en diseño instruccional, tecnología educativa, psicología del aprendizaje y evaluación educativa.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Diseño Instruccional</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Tecnología Educativa</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Evaluación</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Gamificación</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Microlearning</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Learning Analytics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-3 shadow" alt="Equipo de trabajo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">EduDesign Pro</h5>
+                    <p>Especialistas en Ingeniería de Instrucciones y diseño de experiencias de aprendizaje efectivas mediante metodologías sistemáticas y tecnología educativa innovadora.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">Enlaces rápidos</h5>
+                    <div class="footer-links">
+                        <ul>
+                            <li><a href="#inicio">Inicio</a></li>
+                            <li><a href="#servicios">Servicios</a></li>
+                            <li><a href="#portafolio">Portafolio</a></li>
+                            <li><a href="#blog">Blog</a></li>
+                            <li><a href="#contacto">Contáctanos</a></li>
+                            <li><a href="#acerca">Acerca de Nosotros</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">Recursos</h5>
+                    <div class="footer-links">
+                        <ul>
+                            <li><a href="#">Blog Educativo</a></li>
+                            <li><a href="#">Plantillas Gratuitas</a></li>
+                            <li><a href="#">Webinars</a></li>
+                            <li><a href="#">Glosario de Términos</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Política de Privacidad</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 EduDesign Pro - Ingeniería de Instrucciones. Todos los derechos reservados.</p>
+                <p class="small">UNETI - PNFII - T4 - IA - S4-5 2024-2 - Autor: Estudiante TSU Ramsés Flores.</p>
+                <p class="small">Este sitio ha sido desarrollado con fines educativos como parte de un proyecto de diseño web responsive.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Manejo del formulario de contacto
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener valores del formulario
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const service = document.getElementById('service').value;
+            
+            // Simulación de envío exitoso
+            const serviceName = service ? document.getElementById('service').options[document.getElementById('service').selectedIndex].text : 'nuestros servicios';
+            
+            alert(`¡Gracias ${name}! Hemos recibido tu consulta sobre ${serviceName}. Te contactaremos en breve a través de ${email}.`);
+            
+            // Limpiar formulario
+            this.reset();
+        });
+        
+        // Smooth scroll para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if(this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#inicio') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Actualizar navegación activa
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Actualizar navbar activo al hacer scroll
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if(scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Inicializar tooltips de Bootstrap
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Efecto de animación al hacer scroll
+        function checkScroll() {
+            const elements = document.querySelectorAll('.animate-fade-in-up');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if(elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Configurar elementos animados inicialmente
+        document.querySelectorAll('.animate-fade-in-up').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
+        
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+    </script>
+</body>
+</html>
